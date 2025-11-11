@@ -116,10 +116,29 @@ class RoomAdventure {
     private static void setupGame(){
         Room room1 = new Room("Room 1"); // instantiation of an object
         Room room2 = new Room("Room 2");
+        // Room 3
+        Room room3 = new Room("Room 3");
+
+        String[] room3ExitDirections = {"south"};
+        Room[]   room3ExitDestinations = {}; // temporary
+
+        String[] room3Items = {"bookshelf", "painting"};
+        String[] room3ItemDescriptions = {
+            "A dusty bookshelf full of old books.",
+            "A creepy painting where the eyes seem to follow you as you move."
+        };
+
+        String[] room3Grabbables = {"map"};
+
+        room3.setExitDirections(room3ExitDirections);
+        room3.setExitDestinations(new Room[]{ room1 }); // setting exit to room1
+        room3.setItems(room3Items);
+        room3.setItemDescriptions(room3ItemDescriptions);
+        room3.setGrabbables(room3Grabbables);
 
         // Room 1
-        String[] room1ExitDirections = {"east", "south"}; // declaring an array
-        Room[]   room1ExitDestinations = {room2};
+        String[] room1ExitDirections = {"east", "north"}; // declaring an array
+        Room[]   room1ExitDestinations = {room2, room3};
 
         String[] room1Items = {"chair", "desk"};
         String[] room1ItemDescriptions = {
