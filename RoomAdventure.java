@@ -37,8 +37,11 @@ class RoomAdventure {
             // each item is the array is divided by the arg in split()
             String[] words = input.split(" ");
 
-            if (words.length != 2){
+
+            if (words.length < 2) {
                 status = DEFAULT_STATUS;
+                System.out.println(status);
+                continue;  // skip back to the top of the while loop
             }
 
             String verb = words[0];
@@ -57,10 +60,7 @@ class RoomAdventure {
                 default: status = DEFAULT_STATUS;
             }
             
-            System.out.println(status);
-            
-                    
-            
+            System.out.println(status);            
         }
 
     }
@@ -118,23 +118,8 @@ class RoomAdventure {
         Room room2 = new Room("Room 2");
         // Room 3
         Room room3 = new Room("Room 3");
-
-        String[] room3ExitDirections = {"south"};
-        Room[]   room3ExitDestinations = {}; // temporary
-
-        String[] room3Items = {"bookshelf", "painting"};
-        String[] room3ItemDescriptions = {
-            "A dusty bookshelf full of old books.",
-            "A creepy painting where the eyes seem to follow you as you move."
-        };
-
-        String[] room3Grabbables = {"map"};
-
-        room3.setExitDirections(room3ExitDirections);
-        room3.setExitDestinations(new Room[]{ room1 }); // setting exit to room1
-        room3.setItems(room3Items);
-        room3.setItemDescriptions(room3ItemDescriptions);
-        room3.setGrabbables(room3Grabbables);
+        //Room 4
+        Room room4 = new Room("Room 4");
 
         // Room 1
         String[] room1ExitDirections = {"east", "north"}; // declaring an array
@@ -155,8 +140,8 @@ class RoomAdventure {
         room1.setGrabbables(room1Grabbables);
 
         // Room 2
-        String[] room2ExitDirections = {"west"};
-        Room[]   room2ExitDestinations = {room1};
+        String[] room2ExitDirections = {"west", "east"};
+        Room[]   room2ExitDestinations = {room1, room4};
         String[] room2Items = {"fireplace", "rug"};
         String[] room2ItemDescriptions = {
             "Its on fire", 
@@ -169,12 +154,43 @@ class RoomAdventure {
         room2.setItemDescriptions(room2ItemDescriptions);
         room2.setGrabbables(room2Grabbables);
 
+        // Room 3
+        String[] room3ExitDirections = {"south"};
+        Room[]   room3ExitDestinations = {}; // temporary
+
+        String[] room3Items = {"bookshelf", "painting"};
+        String[] room3ItemDescriptions = {
+            "A dusty bookshelf full of old books.",
+            "A creepy painting where the eyes seem to follow you as you move."
+        };
+
+        String[] room3Grabbables = {"map"};
+
+        room3.setExitDirections(room3ExitDirections);
+        room3.setExitDestinations(new Room[]{ room1 }); // setting exit to room1
+        room3.setItems(room3Items);
+        room3.setItemDescriptions(room3ItemDescriptions);
+        room3.setGrabbables(room3Grabbables);
+        
+        //Room 4
+        String[] room4ExitDirections = {"west"};
+        Room[]   room4ExitDestinations = {};
+        
+        String[] room4Items = {"mirror", "statue"};
+        String[] room4ItemDescriptions = {
+            "An old cracked mirror — your reflection appears distorted.",
+            "A statue made of stone."
+        };
+        String[] room4Grabbables = {"gem"};
+        room4.setExitDirections(room4ExitDirections);
+        room4.setExitDestinations(new Room[]{ room2 });
+        room4.setItems(room4Items);
+        room4.setItemDescriptions(room4ItemDescriptions);
+        room4.setGrabbables(room4Grabbables);
+
+        //Start off here
         currentRoom = room1;
     }
-
-
-
-
 }
 
 class Room {
