@@ -69,7 +69,21 @@ class RoomAdventure {
         status = "I don't see that room";
         String[] directions = currentRoom.getExitDirections();
         Room[] rooms = currentRoom.getExitDestinations();
+        if (noun.equals("north") && currentRoom.getName().equals("Room 4")) {
 
+            boolean hasKey = false;
+            for (String item : inventory) {
+                if ("key".equals(item)) {
+                    hasKey = true;
+                    break;
+                }
+            }
+
+            if (!hasKey) {
+                status = "The door is locked. You need a key.";
+                return; // stops the player from entering Room 5
+            }
+        }
         for (int i=0; i < directions.length; i++){
             // for strings we use .equals() to compare 
             if (noun.equals(directions[i])){
@@ -128,7 +142,8 @@ class RoomAdventure {
         Room room3 = new Room("Room 3");
         //Room 4
         Room room4 = new Room("Room 4");
-
+        //Room 5
+        Room room5 = new Room("Room 5");
         // Room 1
         String[] room1ExitDirections = {"east", "north"}; // declaring an array
         Room[]   room1ExitDestinations = {room2, room3};
@@ -182,20 +197,35 @@ class RoomAdventure {
         room3.setGrabbables(room3Grabbables);
         
         //Room 4
-        String[] room4ExitDirections = {"west"};
-        Room[]   room4ExitDestinations = {};
+        String[] room4ExitDirections = {"west", "north"};
+        Room[]   room4ExitDestinations = {room2, room5};
         
         String[] room4Items = {"mirror", "statue"};
         String[] room4ItemDescriptions = {
-            "An old cracked mirror — your reflection appears distorted.",
+            "An old cracked mirror. your reflection appears distorted.",
             "A statue made of stone."
         };
         String[] room4Grabbables = {"gem"};
         room4.setExitDirections(room4ExitDirections);
-        room4.setExitDestinations(new Room[]{ room2 });
+        room4.setExitDestinations(room4ExitDestinations);
         room4.setItems(room4Items);
         room4.setItemDescriptions(room4ItemDescriptions);
         room4.setGrabbables(room4Grabbables);
+
+        //Room 5
+        String[] room5ExitDirections = {"south"};
+        Room[]   room5ExitDestinations = {room2, room4}; 
+
+        String[] room5Items = {"chest"};
+        String[] room5ItemDescriptions = {"A large chest inside is gold."};
+
+        String[] room5Grabbables = {}; 
+
+        room5.setExitDirections(room5ExitDirections);
+        room5.setExitDestinations(new Room[]{ room4 });
+        room5.setItems(room5Items);
+        room5.setItemDescriptions(room5ItemDescriptions);
+        room5.setGrabbables(room5Grabbables);
 
         //Start off here
         currentRoom = room1;
