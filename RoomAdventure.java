@@ -3,16 +3,22 @@ import java.util.Scanner;
 class RoomAdventure {
 
     // class variables
-    private static Room currentRoom;
+    private static Room currentRoom;//tracks which room player is in
     private static String[] inventory = {null, null, null, null, null};
     private static String status;
 
-
+    //type something invalid and this prints
     final private static String DEFAULT_STATUS = "Sorry, I do not understand. Try [verb] [noun]. Valid verbs include 'go', 'look', and 'take'.";
 
     public static void main(String[] args){
          
         setupGame();
+        //Intro message at start of game 
+        System.out.println("==========================================");
+        System.out.println("      WELCOME TO THE ESCAPE ROOM     ");
+        System.out.println(" You must explore rooms 1-4 to escape.");
+        System.out.println(" Find clues, collect items, and survive!");
+        System.out.println("==========================================\n");
 
         // while loops
         while (true){
@@ -57,20 +63,25 @@ class RoomAdventure {
                 case "take":
                     handleTake(noun);
                     break;   
-                default: status = DEFAULT_STATUS;
+                default: status = DEFAULT_STATUS;//if verb doesn't match any command
+                    break;
+                case "open": //lets the player open chest in room 5
+                    handleOpen(noun);
+                    break;
             }
-            
+            //print result of their action
             System.out.println(status);            
         }
 
     }
-
+//Handles movement between the rooms and locked door logic
     private static void handleGo(String noun){
         status = "I don't see that room";
         String[] directions = currentRoom.getExitDirections();
         Room[] rooms = currentRoom.getExitDestinations();
+        // Locked door logic for Room 5
         if (noun.equals("north") && currentRoom.getName().equals("Room 4")) {
-
+            // Check if player has the key in their inventory
             boolean hasKey = false;
             for (String item : inventory) {
                 if ("key".equals(item)) {
@@ -78,7 +89,7 @@ class RoomAdventure {
                     break;
                 }
             }
-
+            //if not key block access to Room 5
             if (!hasKey) {
                 status = "The door is locked. You need a key.";
                 return; // stops the player from entering Room 5
@@ -108,17 +119,17 @@ class RoomAdventure {
     private static void handleTake(String noun){
         status = "I can't grab that.";
         String[] grabs = currentRoom.getGrabbables();
-
+        //Check if the item is grabbable
         for (int i = 0; i < grabs.length; i++){
             if (noun.equals(grabs[i])){
 
-                // maybe make a addToInventory() func?
-                // maybe expand the inventory to any number of items
+                //try to add it to the first empty inventory slot
                 for (int j=0; j < inventory.length; j++){
                     if (inventory[j] == null){
                         inventory[j] = noun;
-                        // maybe say what item was added?
                         status = "Added item to inventory";
+
+                        //Paper clues in Room 2 and Room 3
                         if(noun.equals("paper")){
                             if(currentRoom.getName().equals("Room 3")){
                                status += " — A note on the paper says: 'Check Room 2.'"; 
@@ -134,16 +145,27 @@ class RoomAdventure {
             }
         }
     }
+    //Handles opening the chest in Room 5 to win the game
+    private static void handleOpen(String noun){
+        status = "You can't open that.";
 
+        // Check if player is in Room 5 and is trying to open the chest
+        if (currentRoom.getName().equals("Room 5") && noun.equals("chest")) {
+            System.out.println("\nYou open the chest...");
+            System.out.println("Inside you find gold and a trophy!");
+            System.out.println("Congratulations! You finished the escape room!");
+            System.out.println("GAME OVER");
+            System.exit(0);  // ends the program
+        }
+    }
+//CREATE ROOMS AND SET THEIR PROPERTIES
     private static void setupGame(){
         Room room1 = new Room("Room 1"); // instantiation of an object
         Room room2 = new Room("Room 2");
-        // Room 3
         Room room3 = new Room("Room 3");
-        //Room 4
         Room room4 = new Room("Room 4");
-        //Room 5
-        Room room5 = new Room("Room 5");
+        Room room5 = new Room("Room 5");//locked final room
+        
         // Room 1
         String[] room1ExitDirections = {"east", "north"}; // declaring an array
         Room[]   room1ExitDestinations = {room2, room3};
@@ -180,7 +202,7 @@ class RoomAdventure {
 
         // Room 3
         String[] room3ExitDirections = {"south"};
-        Room[]   room3ExitDestinations = {}; // temporary
+        Room[]   room3ExitDestinations = {}; 
 
         String[] room3Items = {"bookshelf", "painting"};
         String[] room3ItemDescriptions = {
@@ -202,7 +224,7 @@ class RoomAdventure {
         
         String[] room4Items = {"mirror", "statue"};
         String[] room4ItemDescriptions = {
-            "An old cracked mirror. your reflection appears distorted.",
+            "An old cracked mirror. Nothing interesting here.",
             "A statue made of stone."
         };
         String[] room4Grabbables = {"gem"};
@@ -214,15 +236,13 @@ class RoomAdventure {
 
         //Room 5
         String[] room5ExitDirections = {"south"};
-        Room[]   room5ExitDestinations = {room2, room4}; 
 
         String[] room5Items = {"chest"};
-        String[] room5ItemDescriptions = {"A large chest inside is gold."};
-
-        String[] room5Grabbables = {}; 
+        String[] room5ItemDescriptions = {"A large chest type 'open chest'."};
+        String[] room5Grabbables = {};//nothing to take
 
         room5.setExitDirections(room5ExitDirections);
-        room5.setExitDestinations(new Room[]{ room4 });
+        room5.setExitDestinations(new Room[]{ room4 });//bring you back to room 4 get the key
         room5.setItems(room5Items);
         room5.setItemDescriptions(room5ItemDescriptions);
         room5.setGrabbables(room5Grabbables);
