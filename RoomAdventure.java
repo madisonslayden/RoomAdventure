@@ -56,7 +56,7 @@ class RoomAdventure {
                     break;
                 case "take":
                     handleTake(noun);
-                    break;
+                    break;   
                 default: status = DEFAULT_STATUS;
             }
             
@@ -105,10 +105,18 @@ class RoomAdventure {
                         inventory[j] = noun;
                         // maybe say what item was added?
                         status = "Added item to inventory";
+                        if(noun.equals("paper")){
+                            if(currentRoom.getName().equals("Room 3")){
+                               status += " — A note on the paper says: 'Check Room 2.'"; 
+                            } else if(currentRoom.getName().equals("Room 2")){
+                                status += " — A scribble reads: 'Something is in Room 1...'";
+                            }                            
+                            // Hint for the player
+                            status += " (Commit this to memory.)";
+                        }
                         break;
                     }
                 }
-
             }
         }
     }
@@ -144,10 +152,11 @@ class RoomAdventure {
         Room[]   room2ExitDestinations = {room1, room4};
         String[] room2Items = {"fireplace", "rug"};
         String[] room2ItemDescriptions = {
-            "Its on fire", 
+            "Its on fire, wait! whats that paper?", 
             "There is a lump of coal on the rug."
         };
-        String[] room2Grabbables = {"coal"};
+
+        String[] room2Grabbables = {"paper"};
         room2.setExitDirections(room2ExitDirections);
         room2.setExitDestinations(room2ExitDestinations);
         room2.setItems(room2Items);
@@ -160,11 +169,11 @@ class RoomAdventure {
 
         String[] room3Items = {"bookshelf", "painting"};
         String[] room3ItemDescriptions = {
-            "A dusty bookshelf full of old books.",
-            "A creepy painting where the eyes seem to follow you as you move."
+            "A dusty bookshelf full of old books. A piece of paper sticks out.",
+            "A creepy painting nothing to see here."
         };
 
-        String[] room3Grabbables = {"map"};
+        String[] room3Grabbables = {"paper"};
 
         room3.setExitDirections(room3ExitDirections);
         room3.setExitDestinations(new Room[]{ room1 }); // setting exit to room1
@@ -207,6 +216,9 @@ class Room {
         this.name = name; // use this to refer to the instance when it is unclear
     }
 
+    public String getName(){
+        return name;
+    }
     // other methods
     public void setExitDirections(String[] exitDirections){
         this.exitDirections = exitDirections;
